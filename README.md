@@ -6,5 +6,6 @@ Technical write-ups of the products I build but keep closed source. The code is 
 - [L'Instant Clair](linstant-clair.md) - an AI-run news platform. https://linstantclair.com
 - [SaviKids](savikids.md) - adaptive AI tutoring for neurodivergent children. https://savikids.com
 - [Aurelona](aurelona.md) - my AI consulting and delivery practice.
+- [Innpact (professional)](innpact.md) - what I build day to day at Innpact, described at an architecture level since the specifics are Innpact's intellectual property.
 
 These are overviews, not source dumps. They describe architecture and trade-offs without exposing proprietary code.
