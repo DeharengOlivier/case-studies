@@ -1,28 +1,45 @@
 # Engineering at Innpact (professional work, kept private)
 
-This is my day job. I am a Software Engineer at Innpact SA, a regulated impact-finance firm in Luxembourg. The systems, data and business logic here are Innpact's intellectual property and sit inside a regulated environment, so this page stays deliberately at the level of approach and architecture. No proprietary code, configuration, data model or business rule is shown. The point is to describe the kind of engineering I do, not to expose how it is implemented.
+This is my day job. I am a Software Engineer at Innpact SA, a regulated impact-finance firm in Luxembourg. The systems, data and business logic here are Innpact's intellectual property and sit inside a regulated environment, so this page stays deliberately at the level of approach, breadth and technology. No proprietary code, configuration, data model or business rule is shown. The goal is to give an honest picture of the range of engineering I do and the stacks I use, not to expose how anything is implemented.
 
-A generic, clean-room version of the AI retrieval work I do here is open source as [rag-engine](https://github.com/DeharengOlivier/rag-engine).
+A neutral, clean-room version of the AI retrieval work I do here is open source as [rag-engine](https://github.com/DeharengOlivier/rag-engine).
 
-## What I build
+## Breadth of what I have built
 
-I work across internal platforms, automation and applied AI, taking systems from idea to production and then driving their adoption inside the teams. The recurring theme is removing manual, error-prone work and making AI usable in a setting where output has to be trusted and auditable.
+Across my time at Innpact I have shipped roughly fifteen internal projects, spanning an internal platform, applied AI in production, reporting and document automation, infrastructure and governance, and engineering on the firm's impact-measurement product. The recurring theme is removing manual, error-prone work and making AI usable where output has to be trusted and auditable.
 
-## Technical work I can describe (at an architecture level)
+### Internal platform
 
-**Internal platform and intranet.** I built a secure internal web platform that hosts internal tools and AI assistants for the business teams, behind authentication and on isolated infrastructure. It gives non-technical colleagues a single, safe place to reach the tools instead of scattered scripts.
+A full internal platform that gives the teams a single authenticated place to reach their tools and AI assistants, instead of scattered scripts. Full-stack TypeScript and React on the front end, a Python backend, containerized with Docker.
 
-**Automated reporting.** I built pipelines that assemble recurring operational reports from structured inputs, replacing manual copy-and-paste assembly. The work is mostly about parsing, templating and validation, so a report that used to take hours of careful manual handling is produced consistently and on schedule.
+### Applied AI in production
 
-**Document automation for board minutes.** I automated the production of recurring governance documents (board minutes) with a mix of Excel automation and bash scripting. Structured inputs are transformed into the required formatted output, which cuts manual effort and the kind of transcription errors that matter for governance records.
+- A retrieval-augmented generation (RAG) engine built with FastAPI, LangChain, the OpenAI SDK and a SQL data layer (SQLAlchemy and Pydantic), put into production for an internal onboarding workflow. The clean-room, non-proprietary version is my open-source [rag-engine](https://github.com/DeharengOlivier/rag-engine).
+- The company-wide rollout of an AI assistant (Claude), from adoption strategy through security alignment, enablement and training.
+- An AI-assisted newsletter automation.
 
-**Network architecture.** I designed a segmented network (a separation between a public-facing DMZ and an internal LAN, with identity-aware access) so that internal and client-facing AI tools can be hosted securely, keeping sensitive services isolated from anything exposed.
+### Reporting and document automation
 
-**Applied AI in production.** I build and deploy LLM-based automation and I led the company-wide rollout of an AI assistant, from adoption strategy through enablement and training. The engineering discipline behind it (retrieval, evaluations, grounding guardrails) is what the open-source [rag-engine](https://github.com/DeharengOlivier/rag-engine) demonstrates in a neutral, non-proprietary form.
+- Automated report generation that turns structured data (including an Airtable source) into formatted PDF reports, built with FastAPI, Jinja2 templating and WeasyPrint for HTML-to-PDF, with Pillow for image handling. Reports that used to be assembled by hand are now produced consistently and on schedule.
+- Board governance document automation (board minutes and resolutions), using Excel and VBA macros plus PowerShell scripting alongside JavaScript, turning structured inputs into the required formatted records and cutting transcription work and errors.
+- Several Python automations for recurring operational workflows, including an incident register, an opportunity and tender search, and a structured decision-support workflow. Each one removes manual handling from a repetitive process.
+
+### Infrastructure and governance
+
+- An infrastructure audit and a segmented network architecture (a public-facing DMZ separated from the internal LAN, with identity-aware access) so internal and client-facing AI tools can be hosted securely, keeping sensitive services isolated.
+- Contributions to data governance and an internal AI usage policy, so the automation and AI work sits inside clear, auditable rules.
+
+### Product engineering
+
+Engineering on Mira, Innpact's impact-measurement software.
+
+## Stacks I use here
+
+Python (FastAPI, pandas, Jinja2, WeasyPrint, LangChain), TypeScript and React, Docker, SQL, the Airtable API, Excel/VBA and PowerShell for office automation, and LLM providers (OpenAI, Anthropic).
 
 ## Illustrative architecture patterns (generic, not Innpact's actual topology)
 
-These diagrams show the standard patterns I work with. They are intentionally generic and do not represent any real internal topology.
+These diagrams show the standard patterns I work with. They are intentionally generic and do not represent any real internal system or topology.
 
 ### Segmented network for hosting internal and client-facing tools
 
@@ -34,22 +51,20 @@ flowchart LR
     FW --> LAN[Internal LAN]
     LAN --> Tools[Internal tools and AI assistants]
     LAN --> Store[(Internal data store)]
-    classDef ext fill:#eef,stroke:#557;
-    class User,IAP ext;
 ```
 
 ### Reporting and document automation flow
 
 ```mermaid
 flowchart TD
-    Inputs[Structured inputs] --> Parse[Parse and validate]
-    Parse --> Template[Templating engine]
-    Template --> Render[Render report or minutes]
+    Inputs[Structured inputs: Airtable, spreadsheets] --> Parse[Parse and validate]
+    Parse --> Template[Jinja2 templating]
+    Template --> Render[WeasyPrint render to PDF]
     Render --> Review[Human review]
-    Review --> Output[Final document]
-    Parse -. Excel / bash automation .- Template
+    Review --> Output[Final report or minutes]
+    Parse -. Excel/VBA and PowerShell variants .- Template
 ```
 
 ## Why this stays private
 
-The value and the sensitivity both live in the specifics, the data, the rules and the exact implementation, which belong to Innpact and to a regulated context. Keeping this at the level of patterns lets me show the engineering without crossing that line. For the parts I can show in full, see my open-source [projects](https://github.com/DeharengOlivier).
+The value and the sensitivity both live in the specifics, the data, the rules and the exact implementation, which belong to Innpact and to a regulated context. Keeping this at the level of breadth, patterns and stacks lets me show the engineering without crossing that line. For the parts I can show in full, see my open-source [projects](https://github.com/DeharengOlivier).
