@@ -233,21 +233,14 @@ flowchart TB
 
 - Shared Zod contracts across three frameworks. Web (Solid), admin (Next) and the BFF disagree on framework but must agree on data; one Zod package gives runtime validation and compile-time types from a single definition, so contract drift breaks the build, not production. The cost is a small coupling: every app depends on the same package version.
 
-- Two front-end frameworks on purpose. The public site uses SolidJS/TanStack Start for fast SSR and SEO (JSON-LD, sitemaps, OpenGraph), while the admin uses Next.js with TipTap for a rich editing surface. Different jobs, different tools, joined only by the contracts and the BFF.
+- Two front-end frameworks on purpose. The public site uses SolidJS/TanStack Start, the admin uses Next.js with TipTap for a rich editing surface. Different jobs, different tools, joined only by the contracts and the BFF. The reasoning behind the SolidJS choice is detailed in the next section.
 
 - Transparency as a feature, including cost and carbon. Every AI call is metered into `AiUsage`, every article carries its token cost translated into grams of CO2 against the live grid intensity, and the editorial rules (neutrality, attribution, quote integrity, no reconstructed events) are encoded in the prompts and re-checked in code. For a media that is openly AI-run, making the method and the footprint visible is both an ethical stance and the differentiator.
 
-## Key source files
+## 8. Why SolidJS for the public site
 
-- `/Users/olivier/Developpement info/startup/03-L-instant-clair/package.json` (workspaces)
-- `/Users/olivier/Developpement info/startup/03-L-instant-clair/bff/src/app.ts` (API surface)
-- `/Users/olivier/Developpement info/startup/03-L-instant-clair/bff/src/server.ts` (entrypoint)
-- `/Users/olivier/Developpement info/startup/03-L-instant-clair/bff/src/config/cron-jobs.ts` (the newsroom clock)
-- `/Users/olivier/Developpement info/startup/03-L-instant-clair/bff/src/lib/ai-client.ts` (OpenRouter client, usage metering)
-- `/Users/olivier/Developpement info/startup/03-L-instant-clair/bff/src/services/ai-article-scheduling.service.ts` (pipeline orchestration)
-- `/Users/olivier/Developpement info/startup/03-L-instant-clair/bff/src/services/ai-article-generator.service.ts` (prompts + barometer)
-- `/Users/olivier/Developpement info/startup/03-L-instant-clair/bff/src/services/ai-article-quality.service.ts` (quality judge)
-- `/Users/olivier/Developpement info/startup/03-L-instant-clair/bff/src/datawall/` (registry, providers, snapshot and insight services)
-- `/Users/olivier/Developpement info/startup/03-L-instant-clair/bff/prisma/schema.prisma` (data model)
-- `/Users/olivier/Developpement info/startup/03-L-instant-clair/packages/contracts/src/index.ts` (shared contracts)
-- `/Users/olivier/Developpement info/startup/03-L-instant-clair/bff/Dockerfile`, `railway.json`, `docker-compose*.yml` (deployment)
+The public site runs on SolidJS through TanStack Start, and that was a deliberate choice rather than a default. A news platform lives or dies on server-side rendering and SEO, so I wanted fine-grained, precise control over what is rendered on the server and what hydrates on the client. SolidJS is built for exactly that. Its fine-grained reactivity (signals, and no virtual DOM) means hydration happens at the level of individual reactive expressions instead of re-running whole component trees, so the server renders fast and the browser receives very little JavaScript to wake the page up. For content that is essentially static once an article is generated, that yields faster loads and cleaner SEO than a heavier client runtime would.
+
+Speed and efficiency were the other reason. Solid sits at the top of rendering and update benchmarks, and its small runtime is a real edge for a product whose entire promise is being the fast, trustworthy answer.
+
+For most of my other projects I still reach for Next.js. Once you account for the differences in how each framework handles hydration, the feature sets are broadly equivalent, so the deciding factor becomes the ecosystem. Next.js has a far larger community, more libraries, more hiring familiarity and more battle-tested patterns, which makes it the pragmatic default when those matter more than squeezing out the last bit of SSR control. L'Instant Clair is the case where that extra SSR granularity and raw performance were worth choosing the less mainstream tool.
